@@ -125,6 +125,21 @@ async function run() {
       const result = await newPhones.find(query, option).toArray();
       res.send(result);
     });
+    // ===== gets data by date =====
+    app.get("/newphones/:num", async (req, res) => {
+      const number = parseInt(req.params.num || 0);
+      const query = {};
+      const options = {
+        sort: { launch: -1 },
+        projection: { _id: 1, model: 1, price: 1, img:1 },
+      };
+      const result = await newPhones
+        .find(query, options)
+        .skip(number)
+        .limit(24)
+        .toArray();
+      res.send(result);
+    });
     // ==== gets new data by Id =====
     app.get("/newphone/:id", async (req, res) => {
       const id = req.params.id;
